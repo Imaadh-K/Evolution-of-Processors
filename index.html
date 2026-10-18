@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Evolution of Processors</title>
+<meta name="description" content="An interactive exhibition on the history and evolution of computer processors, from the Intel 4004 to the 2026 generation.">
+<style>
+:root{--bg:#07090c;--bg2:#0d1217;--panel:#10171e;--line:#1e2c38;--tx:#d7e3ea;--mut:#8da2b0;--cy:#18e6ff;--bl:#3b8cff;--te:#14d9b0;--or:#ff7a2f;--rd:#ff4a4a;
+--hf:Bahnschrift,"Segoe UI Semibold","Arial Narrow",Eurostile,system-ui,sans-serif;--bf:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--mf:ui-monospace,"Cascadia Code",Consolas,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--bg);color:var(--tx);font:16px/1.65 var(--bf);overflow-x:hidden;
+background-image:linear-gradient(rgba(24,230,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(24,230,255,.035) 1px,transparent 1px);background-size:44px 44px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px)}
+h1,h2,h3,h4{font-family:var(--hf);text-transform:uppercase;letter-spacing:.06em;line-height:1.15}
+a{color:var(--cy)}
+:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+section{padding:84px 0;position:relative}
+.tag{font:12px var(--mf);color:var(--cy);letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:10px}
+.tag::before{content:"> "}
+h2{font-size:clamp(1.7rem,4vw,2.7rem);margin-bottom:14px}
+h2 span{color:var(--cy);text-shadow:0 0 18px rgba(24,230,255,.45)}
+.lead{color:var(--mut);max-width:720px;margin-bottom:34px}
+.card{background:linear-gradient(160deg,var(--panel),#0b1015);border:1px solid var(--line);border-radius:6px;padding:20px;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.card::before,.card::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--c,var(--cy));opacity:.7}
+.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.card:hover{transform:translateY(-4px);border-color:var(--c,var(--cy));box-shadow:0 0 24px -6px var(--c,var(--cy))}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
+.btn{display:inline-block;font:600 .95rem var(--hf);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--bg);background:var(--cy);border:0;padding:14px 28px;border-radius:3px;cursor:pointer;box-shadow:0 0 22px rgba(24,230,255,.4);transition:transform .25s,box-shadow .25s,background .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(24,230,255,.7);background:#6df0ff}
+/* NAV */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,9,12,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font:700 1rem var(--hf);letter-spacing:.14em;color:var(--cy);text-decoration:none}
+.nav ul{display:flex;gap:4px;list-style:none}
+.nav ul a{color:var(--mut);text-decoration:none;font:.8rem var(--mf);padding:8px 10px;border-radius:3px;transition:color .2s,background .2s}
+.nav ul a:hover{color:var(--cy);background:rgba(24,230,255,.08)}
+#menu{display:none;background:none;border:1px solid var(--line);color:var(--cy);font:1.2rem var(--mf);padding:4px 12px;border-radius:3px;cursor:pointer}
+#prog{position:absolute;bottom:-1px;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--te),var(--cy),var(--bl));box-shadow:0 0 10px var(--cy)}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;overflow:hidden}
+#hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+#hero h1{font-size:clamp(2.3rem,6vw,4.6rem);font-weight:800;letter-spacing:.05em}
+#hero h1 em{font-style:normal;color:var(--cy);text-shadow:0 0 28px rgba(24,230,255,.55)}
+#hero p{color:var(--mut);margin:22px 0 30px;max-width:560px;font-size:1.08rem}
+.term{font:.85rem var(--mf);color:var(--te);margin-bottom:18px}
+.term::after{content:"_";animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.stats{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.stats b{display:block;font:700 1.5rem var(--hf);color:var(--cy)}.stats small{color:var(--mut);font:.72rem var(--mf);text-transform:uppercase}
+.chip{position:relative;width:min(340px,80vw);aspect-ratio:1;margin:0 auto;display:grid;place-items:center}
+.chip .pins{position:absolute;inset:0;background:
+repeating-linear-gradient(90deg,var(--cy) 0 3px,transparent 3px 22px) top/100% 14px no-repeat,
+repeating-linear-gradient(90deg,var(--cy) 0 3px,transparent 3px 22px) bottom/100% 14px no-repeat,
+repeating-linear-gradient(0deg,var(--cy) 0 3px,transparent 3px 22px) left/14px 100% no-repeat,
+repeating-linear-gradient(0deg,var(--cy) 0 3px,transparent 3px 22px) right/14px 100% no-repeat;opacity:.55}
+.die{width:74%;aspect-ratio:1;border:2px solid var(--cy);border-radius:10px;background:#0a1117;box-shadow:0 0 40px rgba(24,230,255,.35),inset 0 0 40px rgba(24,230,255,.12);display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px;animation:pulse 4s ease-in-out infinite}
+.die i{border:1px solid rgba(24,230,255,.5);border-radius:3px;background:linear-gradient(135deg,rgba(24,230,255,.18),rgba(59,140,255,.05));animation:core 3s ease-in-out infinite}
+.die i:nth-child(3n){animation-delay:.6s;border-color:rgba(20,217,176,.6)}.die i:nth-child(5n){animation-delay:1.2s;border-color:rgba(255,122,47,.6)}
+.die i.big{grid-column:span 2;grid-row:span 2;display:grid;place-items:center;font:700 1.1rem var(--hf);color:var(--cy);letter-spacing:.1em}
+@keyframes core{50%{background:rgba(24,230,255,.38)}}
+@keyframes pulse{50%{box-shadow:0 0 60px rgba(24,230,255,.55),inset 0 0 40px rgba(24,230,255,.2)}}
+.trace{position:absolute;height:2px;background:linear-gradient(90deg,transparent,var(--cy),transparent);width:30vw;opacity:.5;animation:slide 7s linear infinite}
+@keyframes slide{from{transform:translateX(-40vw)}to{transform:translateX(110vw)}}
+/* INTRO */
+.fact{--c:var(--cy)}.fact h3{font-size:.95rem;color:var(--c);margin-bottom:6px}.fact p{color:var(--mut);font-size:.92rem}
+.fact .n{font:12px var(--mf);color:var(--mut)}
+.def{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:30px}
+/* TIMELINE */
+#tl{position:relative;max-width:900px;margin:0 auto;padding-left:34px}
+#tl::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(var(--te),var(--cy),var(--bl),var(--or));box-shadow:0 0 12px var(--cy)}
+.ti{position:relative;margin-bottom:16px}
+.ti::before{content:"";position:absolute;left:-30px;top:26px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--c);box-shadow:0 0 10px var(--c)}
+.ti>button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:54px 1fr auto;gap:16px;align-items:center;width:100%;cursor:pointer;padding:16px 18px}
+.mini{width:46px;height:46px;border:2px solid var(--c);border-radius:5px;background:repeating-linear-gradient(45deg,transparent 0 5px,color-mix(in srgb,var(--c) 30%,transparent) 5px 6px);position:relative}
+.mini::after{content:"";position:absolute;inset:11px;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 25%,transparent)}
+.ti .yr{font:700 .8rem var(--mf);color:var(--c)}.ti h3{font-size:1.1rem;letter-spacing:.04em}.ti .mk{font-size:.82rem;color:var(--mut)}
+.ti .pl{font:1.4rem var(--mf);color:var(--c);transition:transform .3s}.ti.open .pl{transform:rotate(45deg)}
+.ti>button:hover h3,.ti>button:focus-visible h3{color:var(--c)}
+.ti>button:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.pn{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s}.ti.open .pn{grid-template-rows:1fr}
+.pn>div{overflow:hidden}
+.pn dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;padding:4px 18px 8px;border-top:1px dashed var(--line);margin:0 18px}
+.pn dt{font:11px var(--mf);color:var(--c);text-transform:uppercase;letter-spacing:.1em;margin-top:12px}.pn dd{font-size:.9rem}
+.pn p{padding:6px 18px 18px;margin:0 18px;color:var(--mut);font-size:.93rem}.pn p b{color:var(--tx)}
+/* ERAS */
+.era{--c:var(--cy)}.era .y{font:12px var(--mf);color:var(--c)}.era h3{font-size:1.05rem;margin:6px 0 8px}.era p{color:var(--mut);font-size:.9rem}
+.era .bar{height:3px;background:var(--c);margin-bottom:14px;box-shadow:0 0 12px var(--c);width:36px;transition:width .4s}.era:hover .bar{width:100%}
+/* TODAY */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tabs button,.mets button{font:600 .85rem var(--hf);letter-spacing:.1em;text-transform:uppercase;background:var(--panel);color:var(--mut);border:1px solid var(--line);padding:10px 18px;border-radius:3px;cursor:pointer;transition:all .25s}
+.tabs button:hover,.mets button:hover{color:var(--cy);border-color:var(--cy)}
+.tabs button[aria-selected=true],.mets button[aria-pressed=true]{color:var(--bg);background:var(--cy);border-color:var(--cy);box-shadow:0 0 16px rgba(24,230,255,.45)}
+#pcards{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.pc h3{font-size:1.15rem;color:var(--c)}.pc .st{display:inline-block;font:11px var(--mf);border:1px solid var(--c);color:var(--c);padding:2px 8px;border-radius:20px;margin:8px 0 12px}
+.pc table{width:100%;border-collapse:collapse;font-size:.88rem}.pc th{width:34%;text-align:left;font:11px var(--mf);color:var(--mut);text-transform:uppercase;vertical-align:top;padding:7px 8px 7px 0}.pc td{padding:7px 0;border-top:1px solid var(--line)}.pc tr:first-child td{border-top:0}
+.pc th{border-top:1px solid var(--line)}.pc tr:first-child th{border-top:0}
+.note{font:.8rem var(--mf);color:var(--mut);border-left:2px solid var(--or);padding:8px 14px;margin-top:22px;background:rgba(255,122,47,.05)}
+.lib{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.lib input{flex:1;min-width:220px;background:var(--panel);border:1px solid var(--line);color:var(--tx);font:.9rem var(--mf);padding:11px 14px;border-radius:3px;transition:border-color .25s,box-shadow .25s}
+.lib input:hover,.lib input:focus{border-color:var(--cy);box-shadow:0 0 14px rgba(24,230,255,.25);outline:none}
+.lib small{font:12px var(--mf);color:var(--mut)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px;max-height:620px;overflow-y:auto}
+#lt{width:100%;border-collapse:collapse;font-size:.88rem;min-width:620px}
+#lt th{position:sticky;top:0;background:#0b1015;text-align:left;font:11px var(--mf);color:var(--cy);text-transform:uppercase;letter-spacing:.12em;padding:12px 14px;border-bottom:1px solid var(--cy)}
+#lt td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+#lt tr:hover td{background:rgba(24,230,255,.06)}
+#lt td:first-child{font:700 .85rem var(--mf);color:var(--or);white-space:nowrap}#lt td:nth-child(2){font-weight:600;color:var(--tx)}#lt td:nth-child(3){white-space:nowrap;color:var(--te);font-family:var(--mf);font-size:.82rem}#lt td:last-child{color:var(--mut)}
+/* BARS */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.vs .card h3{font-size:1.3rem}.vs .sub{font:12px var(--mf);color:var(--mut);margin-bottom:16px}
+.row{margin:14px 0}.row .lb{display:flex;justify-content:space-between;font:12px var(--mf);color:var(--mut);margin-bottom:5px}.row .lb b{color:var(--tx);font-weight:600}
+.trk{height:10px;background:#0a0f14;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 40%,#fff));box-shadow:0 0 10px var(--c);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.ratios{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:20px}
+.ratios .card{text-align:center;--c:var(--or)}.ratios b{display:block;font:700 1.6rem var(--hf);color:var(--or)}.ratios small{font:11px var(--mf);color:var(--mut);text-transform:uppercase}
+.mets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+#chart .row{display:grid;grid-template-columns:150px 1fr 120px;gap:12px;align-items:center;margin:9px 0}
+#chart .lb{display:block;margin:0;color:var(--tx)}#chart .v{font:12px var(--mf);color:var(--cy);text-align:right}
+#chart .fill{transition-duration:.8s}
+.cap{font:12px var(--mf);color:var(--mut);margin-top:12px}
+/* INSIDE */
+.inside{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start}
+#dia{border:2px solid var(--cy);border-radius:10px;padding:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;background:#0a1117;box-shadow:0 0 30px rgba(24,230,255,.2),inset 0 0 30px rgba(24,230,255,.06);position:relative}
+#dia button{font:600 .8rem var(--hf);letter-spacing:.08em;text-transform:uppercase;color:var(--tx);background:rgba(24,230,255,.06);border:1px solid var(--c);border-radius:4px;padding:16px 6px;cursor:pointer;transition:all .25s;min-height:62px}
+#dia button:hover,#dia button[aria-pressed=true]{background:color-mix(in srgb,var(--c) 28%,transparent);box-shadow:0 0 18px var(--c);transform:scale(1.03)}
+#dia .w2{grid-column:span 2}#dia .w3{grid-column:span 3}#dia .w6{grid-column:span 6}
+#dia .lab{grid-column:span 6;font:11px var(--mf);color:var(--mut);text-transform:uppercase;letter-spacing:.15em}
+#info{min-height:210px;--c:var(--cy)}#info h3{color:var(--c);margin-bottom:10px}#info p{color:var(--mut)}#info .hint{font:12px var(--mf);color:var(--te);margin-top:14px}
+/* TECH */
+.tech{--c:var(--te)}.tech h3{font-size:.95rem;color:var(--c);margin-bottom:6px}.tech p{color:var(--mut);font-size:.9rem}
+/* FUTURE */
+.fut{--c:var(--or)}.fut h3{font-size:.95rem;color:var(--or);margin-bottom:6px}.fut p{color:var(--mut);font-size:.9rem}
+#end{text-align:center;padding:120px 0;background:radial-gradient(ellipse at center,rgba(24,230,255,.1),transparent 65%)}
+#end blockquote{font:700 clamp(1.4rem,3.6vw,2.5rem)/1.35 var(--hf);text-transform:uppercase;letter-spacing:.05em;max-width:900px;margin:0 auto}
+#end blockquote span{color:var(--cy);text-shadow:0 0 22px rgba(24,230,255,.6)}
+#end .or{color:var(--or)}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);font:.8rem var(--mf);text-align:center}
+footer p{max-width:820px;margin:0 auto 8px}
+.cred{font:700 .95rem var(--hf);letter-spacing:.14em;text-transform:uppercase;color:var(--tx);margin:0 auto 14px;padding-bottom:14px;border-bottom:1px solid var(--line);max-width:820px}
+.cred span{color:var(--cy);text-shadow:0 0 14px rgba(24,230,255,.5)}
+#top{position:fixed;right:18px;bottom:18px;z-index:95;width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--cy);color:var(--cy);font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s,box-shadow .3s}
+#top.show{opacity:1;pointer-events:auto}#top:hover{box-shadow:0 0 18px var(--cy)}
+@media(max-width:900px){#hero .wrap,.inside,.vs,.def{grid-template-columns:1fr}.chip{order:-1;width:min(240px,60vw)}
+#menu{display:block}.nav ul{display:none;position:absolute;top:58px;left:0;right:0;flex-direction:column;background:var(--bg2);border-bottom:1px solid var(--line);padding:10px}.nav ul.open{display:flex}
+#chart .row{grid-template-columns:100px 1fr 80px}}
+@media(max-width:560px){section{padding:60px 0}#tl{padding-left:26px}.ti>button{grid-template-columns:42px 1fr auto;gap:10px;padding:14px 12px}.mini{width:38px;height:38px}.ti::before{left:-24px}
+#pcards{grid-template-columns:1fr}#dia{grid-template-columns:repeat(2,1fr)}#dia .w2,#dia .w3,#dia .w6,#dia .lab{grid-column:span 2}#chart .row{grid-template-columns:1fr 70px}#chart .trk{grid-column:1/-1;order:3}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="logo" href="#hero">CPU//EVOLUTION</a>
+<button id="menu" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nl">&#9776;</button>
+<ul id="nl"><li><a href="#intro">Intro</a></li><li><a href="#timeline">Timeline</a></li><li><a href="#eras">Eras</a></li><li><a href="#today">Today</a></li><li><a href="#library">Library</a></li><li><a href="#vs">Then/Now</a></li><li><a href="#compare">Compare</a></li><li><a href="#inside">Inside</a></li><li><a href="#tech">Tech</a></li><li><a href="#future">Future</a></li></ul></div><div id="prog"></div></header>
+
+<main>
+<section id="hero"><div class="trace" style="top:22%"></div><div class="trace" style="top:58%;animation-delay:3s"></div><div class="trace" style="top:84%;animation-delay:5s"></div>
+<div class="wrap"><div>
+<p class="term" style="margin:0 0 18px">$ boot --exhibit "history-of-computing"</p>
+<h1>The Evolution<br>of <em>Processors</em></h1>
+<p>From the 4-bit Intel 4004 to today's multi-core, AI-accelerated CPUs and systems-on-chip, explore fifty-five years of the technology that powers every digital device.</p>
+<a class="btn" href="#timeline">Explore the Timeline</a>
+<div class="stats"><div><b>1971</b><small>First microprocessor</small></div><div><b>2,300</b><small>Transistors in 4004</small></div><div><b>28 billion</b><small>Transistors in Apple M4</small></div></div>
+</div>
+<div class="chip" aria-hidden="true"><div class="pins"></div><div class="die"><i class="big">CPU</i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+</div></section>
+
+<section id="intro"><div class="wrap">
+<span class="tag">01 // Introduction</span><h2>What is a <span>processor?</span></h2>
+<p class="lead">A processor is the "brain" of a computer. It fetches instructions from memory, decodes them, and executes them: arithmetic, logic, and data movement billions of times every second.</p>
+<div class="def">
+<div class="card rv"><h3 style="color:var(--cy);font-size:1rem">What it is</h3><p style="color:var(--mut)">The CPU (central processing unit) runs program instructions. Modern chips are often a full SoC, adding graphics, AI engines, and memory controllers beside the CPU cores.</p></div>
+<div class="card rv" style="--c:var(--te)"><h3 style="color:var(--te);font-size:1rem">Why it matters</h3><p style="color:var(--mut)">Every phone, laptop, car, server and game console depends on one. Faster, more efficient processors made the internet, smartphones and modern AI possible.</p></div>
+<div class="card rv" style="--c:var(--or)"><h3 style="color:var(--or);font-size:1rem">How it evolved</h3><p style="color:var(--mut)">Thousands of transistors became billions; one core became many; and general-purpose chips gained specialised engines for graphics and AI.</p></div>
+</div>
+<h3 style="font-size:1.1rem;margin:10px 0 16px">Eight forces that drive CPU evolution</h3>
+<div class="grid" id="factors"></div>
+</div></section>
+
+<section id="timeline"><div class="wrap">
+<span class="tag">02 // Interactive timeline</span><h2>Processor <span>timeline</span></h2>
+<p class="lead">Click any entry to expand its full specifications and why it mattered. Specifications are those commonly published by manufacturers; "up to" figures are maximums.</p>
+<div id="tl"></div>
+</div></section>
+
+<section id="eras"><div class="wrap">
+<span class="tag">03 // Processor eras</span><h2>Nine <span>eras</span> of computing</h2>
+<p class="lead">Each era was defined by a shift in how chips were designed, built or used.</p>
+<div class="grid" id="erag"></div>
+</div></section>
+
+<section id="today"><div class="wrap">
+<span class="tag">04 // Latest in 2026</span><h2>The processors <span>of today</span></h2>
+<p class="lead">Current families from the four major platforms. Figures are official manufacturer claims; each card is labelled <b>Released</b> or <b>Announced</b>. Unannounced and rumoured products are deliberately left out.</p>
+<div class="tabs" role="tablist" aria-label="Manufacturers" id="tabs"></div>
+<div id="pcards" role="tabpanel"></div>
+<p class="note">Sources: Intel, AMD, Apple and Qualcomm announcements (CES 2026, MWC 2026, Apple Newsroom 3 Mar 2026, Snapdragon Summit 2025). Specification details not confirmed by official material are omitted. Always check the manufacturer's product pages for current availability.</p>
+</div></section>
+
+<section id="library"><div class="wrap">
+<span class="tag">04b // Processor library</span><h2>Every <span>major processor</span></h2>
+<p class="lead">A searchable index of Intel, AMD, Apple and Qualcomm Snapdragon families, plus other important chips from Arm, IBM, Motorola, NVIDIA and more. It lists generations and families rather than every individual model, because Intel alone has shipped thousands of SKUs.</p>
+<div class="tabs" role="tablist" aria-label="Library brand" id="ltabs"></div>
+<div class="lib"><input id="lq" type="search" placeholder="Search name, year or process (e.g. 2021, 5 nm, Ultra)" aria-label="Search the processor library"><small id="lc" aria-live="polite"></small></div>
+<div class="tw"><table id="lt"><thead><tr><th scope="col">Year</th><th scope="col">Processor</th><th scope="col">Process</th><th scope="col">Notes</th></tr></thead><tbody></tbody></table></div>
+</div></section>
+
+<section id="vs"><div class="wrap">
+<span class="tag">05 // Then vs now</span><h2>Intel 4004 <span>vs</span> Apple M4</h2>
+<p class="lead">Bars use a logarithmic scale; otherwise the 4004 would be invisible. The ratios below show the true gap.</p>
+<div class="vs" id="vsb"></div>
+<div class="ratios" id="ratios"></div>
+</div></section>
+
+<section id="compare"><div class="wrap">
+<span class="tag">06 // Technology comparison</span><h2>How CPU technology <span>changed</span></h2>
+<p class="lead">Choose a metric to compare nine landmark processors. Bars are logarithmic.</p>
+<div class="mets" id="mets"></div>
+<div class="card" id="chart" aria-live="polite"></div>
+<p class="cap" id="cap"></p>
+</div></section>
+
+<section id="inside"><div class="wrap">
+<span class="tag">07 // Inside a CPU</span><h2>Anatomy of a <span>modern chip</span></h2>
+<p class="lead">Select or hover over a block to learn what it does. This is a simplified conceptual diagram, not any one real chip's floorplan.</p>
+<div class="inside"><div id="dia" role="group" aria-label="CPU diagram"></div>
+<div class="card" id="info" aria-live="polite"></div></div>
+</div></section>
+
+<section id="tech"><div class="wrap">
+<span class="tag">08 // Modern CPU technologies</span><h2>The ideas <span>behind today's chips</span></h2>
+<div class="grid" id="techg"></div>
+</div></section>
+
+<section id="future"><div class="wrap">
+<span class="tag">09 // Future of processors</span><h2>What <span>comes next?</span></h2>
+<p class="lead">Trends already visible in the industry. These are directions, not product promises.</p>
+<div class="grid" id="futg"></div>
+</div></section>
+
+<section id="end"><div class="wrap"><blockquote class="rv">From <span>thousands</span> of transistors to <span>billions</span>.<br>From simple calculations to <span class="or">AI</span>.<br>The evolution continues.</blockquote></div></section>
+</main>
+<footer><div class="wrap"><p class="cred">Made by <span>Lloyd Thomas Silva</span> and <span>Imaadh Khan</span></p><p>The Evolution of Processors. A web design project built with HTML, CSS and JavaScript only.</p><p>Specifications reflect manufacturer-published information as of October 2026. Product names are trademarks of their respective owners.</p></div></footer>
+<button id="top" aria-label="Back to top">&#8593;</button>
+
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const el=(h)=>{const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstChild};
+
+/* ---------- DATA ---------- */
+const factors=[
+["Transistor count","More transistors allow more cores, cache and features on one chip."],
+["Clock speed","How many cycles per second a core runs. It rose fast until power limits slowed it."],
+["Architecture","The instruction set and design (x86, Arm) determine how much work each cycle does."],
+["Number of cores","Multiple cores run tasks in parallel, since single cores hit power limits."],
+["Cache","Small, fast on-chip memory that hides the slowness of main memory."],
+["Power efficiency","Performance per watt now decides battery life, heat and data-centre costs."],
+["Manufacturing process","Smaller nodes (10 µm to nanometre-class) pack in more transistors."],
+["Specialised acceleration","GPUs, NPUs and media engines do certain jobs far more efficiently than CPU cores."]];
+
+const T=[ /* year,name,maker,arch,specs,process,why,color */
+[1971,"Intel 4004","Intel","4-bit, MCS-4","2,300 transistors · 740 kHz · 4-bit","10 µm PMOS","The world's first commercially available microprocessor: a complete CPU on one chip, originally designed for a Busicom calculator.","var(--or)"],
+[1972,"Intel 8008","Intel","8-bit","3,500 transistors · 8-bit · initial clock about 500 kHz","10 µm","The first 8-bit microprocessor. It led to the 8080 and eventually the x86 family.","var(--or)"],
+[1978,"Intel 8086","Intel","x86 (16-bit)","29,000 transistors · 5-10 MHz · 16-bit","3 µm","Created the x86 instruction set. A cut-down variant, the 8088, powered the original IBM PC.","var(--cy)"],
+[1985,"Intel 80386","Intel","x86 (32-bit, IA-32)","275,000 transistors · 12-33 MHz variants · 32-bit","1.5 µm (later 1 µm)","Brought 32-bit computing, protected mode and virtual memory to PCs, enabling modern multitasking operating systems.","var(--cy)"],
+[1993,"Intel Pentium","Intel","P5, superscalar x86","3.1 million transistors · 60-66 MHz at launch","0.8 µm","Two instruction pipelines let it execute more than one instruction per clock, and the brand made CPUs household names.","var(--cy)"],
+[1999,"AMD Athlon","AMD","K7, x86","About 22 million transistors · 500 MHz at launch","0.25 µm","Made AMD a true rival to Intel. Athlon was the first x86 CPU to reach 1 GHz (March 2000).","var(--te)"],
+[2006,"Intel Core 2 (Core architecture)","Intel","Core microarchitecture, x86-64","Conroe: 291 million transistors · dual-core","65 nm","Shifted the industry from raw clock speed to efficiency and multi-core designs after the Pentium 4 era.","var(--bl)"],
+[2017,"AMD Ryzen (Zen)","AMD","Zen, x86-64","Up to 8 cores / 16 threads (Ryzen 7)","14 nm","Ended years of stagnation in desktop CPUs and made 8-core processors mainstream.","var(--te)"],
+[2019,"AMD Ryzen 3000 (Zen 2)","AMD","Zen 2, chiplet design","Up to 16 cores (Ryzen 9 3950X)","TSMC 7 nm CPU chiplets + separate I/O die","Popularised chiplets in consumer PCs: small CPU dies combined with a separate I/O die.","var(--te)"],
+[2020,"Apple M1","Apple","Arm (Apple Silicon)","16 billion transistors · 4 performance + 4 efficiency cores · unified memory","TSMC 5 nm","Proved an Arm SoC could beat contemporary PC chips in efficiency and launched the Apple Silicon era for Macs.","var(--bl)"],
+[2021,"Intel Core 12th Gen (Alder Lake)","Intel","Hybrid x86 (P-cores + E-cores)","Up to 8 P-cores + 8 E-cores","Intel 7","Brought performance/efficiency hybrid cores to mainstream desktop x86.","var(--cy)"],
+[2022,"AMD Ryzen 7 5800X3D","AMD","Zen 3 + 3D V-Cache","8 cores · 96 MB L3 cache","TSMC 7 nm","First consumer CPU to stack extra cache on top of the die, giving a large boost in many games.","var(--te)"],
+[2024,"Snapdragon X Elite","Qualcomm","Arm (Oryon)","12 Oryon cores · 45 TOPS NPU","4 nm","Qualcomm's first custom-core Windows-on-Arm PC chip, introduced alongside the Copilot+ PC category.","var(--bl)"],
+[2024,"Intel Core Ultra 200V (Lunar Lake)","Intel","Hybrid x86 SoC","Memory on package · NPU up to 48 TOPS","TSMC N3B (compute tile)","Intel's efficiency-first design for thin laptops with an integrated NPU for AI PCs.","var(--cy)"],
+[2024,"AMD Ryzen 9000 (Zen 5)","AMD","Zen 5, x86-64","Up to 16 cores / 32 threads on desktop","TSMC 4 nm-class (CPU chiplets)","Wider cores and better instructions-per-clock for desktop Ryzen.","var(--te)"],
+[2025,"Apple M5","Apple","Arm (Apple Silicon)","Up to 10-core CPU · GPU cores each with a Neural Accelerator","TSMC 3 nm (3rd generation)","Added AI accelerators to every GPU core, emphasising on-device AI.","var(--bl)"],
+[2026,"Intel Core Ultra Series 3 (Panther Lake)","Intel","Cougar Cove P + Darkmont E + LPE cores","Up to 16 cores · up to 12 Xe3 GPU cores · NPU up to 50 TOPS","Intel 18A","The first client SoC on Intel 18A, using RibbonFET transistors and PowerVia backside power delivery.","var(--cy)"],
+[2026,"AMD Ryzen AI 400 &amp; Ryzen 7 9850X3D","AMD","Zen 5 + RDNA 3.5 + XDNA 2","Up to 12 cores / 24 threads · NPU up to 60 TOPS (mobile)","TSMC 4 nm-class","Refreshes AMD's Zen 5 generation for AI laptops and gaming desktops.","var(--te)"],
+[2026,"Apple M5 Pro &amp; M5 Max","Apple","Arm, Fusion Architecture","18-core CPU (6 super + 12 performance) · up to 40-core GPU · up to 128 GB unified memory (Max)","TSMC 3 nm, two dies joined","Apple's Fusion Architecture joins two dies into one SoC for pro laptops.","var(--bl)"],
+[2026,"Snapdragon X2 Elite Extreme","Qualcomm","Arm (3rd-gen Oryon)","Up to 18 cores · up to 5.0 GHz · Hexagon NPU 80 TOPS","3 nm","Qualcomm calls it the first Arm PC chip to reach 5 GHz, with the strongest NPU in a laptop chip.","var(--bl)"]];
+
+const X=[
+"Designed by Federico Faggin, Ted Hoff, Stan Mazor and Masatoshi Shima for the Busicom 141-PF calculator. It executed roughly 92,600 instructions per second and came in a 16-pin package.",
+"Originally designed for the Datapoint 2200 terminal. Its 14-bit address bus could reach 16 KB of memory, and it came in an 18-pin package.",
+"Its 20-bit address bus reached 1 MB of memory. The 8088 variant, with an 8-bit external bus, powered the 1981 IBM PC.",
+"Addressed up to 4 GB of memory. The Compaq Deskpro 386 (1986) was among the first PCs to use it, ahead of IBM.",
+"Has 16 KB of L1 cache (8 KB instructions + 8 KB data). The 1994 FDIV floating-point bug led Intel to a costly replacement programme.",
+"Used the EV6 bus design licensed from DEC's Alpha processor. The name comes from a Greek word associated with contests.",
+"Sold as Core 2 Duo and Quad, with a large shared L2 cache (up to 4 MB per pair of cores on early Conroe parts) and 64-bit support.",
+"Launched March 2017 with the Ryzen 7 1800X. It introduced Infinity Fabric, which links cores and, later, chiplets.",
+"Added PCIe 4.0 to consumer desktops. Chiplets let AMD offer up to 16 cores on the mainstream AM4 socket.",
+"Launched November 2020 in the MacBook Air, Mac mini and 13-inch MacBook Pro. Apple's Rosetta 2 translated Intel apps to run on it.",
+"Introduced Intel Thread Director, which helps Windows assign work to the right core type, plus DDR5 and PCIe 5.0 support.",
+"Stacked 64 MB of extra cache on the die, for 96 MB of L3 in total. It ran on the older AM4 socket.",
+"Its Oryon cores came from Qualcomm's 2021 acquisition of the chip startup Nuvia.",
+"Sold as Core Ultra 200V with up to 8 cores (4 P + 4 E) and memory placed on the same package as the processor.",
+"Launched on the AM5 socket. Gaming variants with 3D V-Cache, such as the 9800X3D, followed in November 2024.",
+"Part of Apple's fifth generation of Apple Silicon. Debuted in October 2025 products including the 14-inch MacBook Pro and iPad Pro.",
+"Intel announced 14 chips across 5 product families at CES 2026. Laptops using them went on sale from 27 January 2026. Fabricated at Intel's Fab 52 in Arizona.",
+"The Ryzen AI 400 family has seven chips. The flagship Ryzen AI 9 HX 475 has 12 cores, boosts up to 5.2 GHz and supports LPDDR5X-8533.",
+"Announced 3 March 2026. Memory bandwidth is up to 307 GB/s on the Pro and 614 GB/s on the Max. Both use the same 18-core CPU layout.",
+"Qualcomm announced three chips: X2 Elite Extreme, and two X2 Elite models. The Extreme has 53 MB of cache and 228 GB/s of memory bandwidth."];
+const A=[[2021,"Apple M1 Pro &amp; M1 Max","Apple","Arm (Apple Silicon)","Pro: 10-core CPU, up to 16-core GPU, 33.7 billion transistors. Max: up to 32-core GPU, 57 billion transistors","TSMC 5 nm","Scaled the M1 design up for professional laptops with far more GPU cores and memory bandwidth.","var(--bl)","Launched October 2021 in the 14-inch and 16-inch MacBook Pro. The Max supports up to 64 GB of unified memory at 400 GB/s."],
+[2022,"Apple M1 Ultra","Apple","Arm (Apple Silicon)","20-core CPU (16 P + 4 E) · up to 64-core GPU · 114 billion transistors · up to 128 GB memory","TSMC 5 nm, two M1 Max dies joined","Introduced UltraFusion, which links two chips so software sees one processor.","var(--bl)","Announced March 2022 for the Mac Studio, with 800 GB/s of memory bandwidth."],
+[2022,"Apple M2","Apple","Arm (Apple Silicon)","8-core CPU (4 P + 4 E) · up to 10-core GPU · 20 billion transistors","TSMC 2nd-generation 5 nm","Second Apple Silicon generation, with higher CPU and GPU performance than M1 and 100 GB/s memory bandwidth.","var(--bl)","Announced June 2022 at WWDC for the MacBook Air and 13-inch MacBook Pro."],
+[2023,"Apple M2 Pro &amp; M2 Max","Apple","Arm (Apple Silicon)","M2 Pro: up to 12-core CPU, 19-core GPU, 40 billion transistors. M2 Max: up to 38-core GPU, 67 billion transistors","TSMC 2nd-generation 5 nm","Brought M2-generation performance to pro laptops and the Mac mini.","var(--bl)","Announced January 2023. The M2 Max supports up to 96 GB of unified memory at 400 GB/s."],
+[2023,"Apple M2 Ultra","Apple","Arm (Apple Silicon)","24-core CPU · up to 76-core GPU · 134 billion transistors · up to 192 GB memory","TSMC 2nd-generation 5 nm, two dies joined","Doubled the M2 Max with UltraFusion for workstation-class Macs.","var(--bl)","Announced June 2023 for the Mac Studio and Mac Pro, with 800 GB/s memory bandwidth."],
+[2023,"Apple M3, M3 Pro &amp; M3 Max","Apple","Arm (Apple Silicon)","M3: 8-core CPU, up to 10-core GPU, 25 billion transistors. M3 Pro: up to 12-core CPU. M3 Max: up to 16-core CPU, up to 40-core GPU, 92 billion transistors","TSMC 3 nm","Among the first 3 nm PC chips and the first Apple chips with hardware ray tracing and Dynamic Caching in the GPU.","var(--bl)","Announced 30 October 2023. The M3 Max supports up to 128 GB of unified memory at 400 GB/s."],
+[2024,"Apple M4","Apple","Arm (Apple Silicon)","Up to 10-core CPU (4 P + 6 E) · 10-core GPU · 28 billion transistors · 38 TOPS Neural Engine","TSMC 2nd-generation 3 nm","Debuted in the iPad Pro with a much faster Neural Engine focused on on-device AI.","var(--bl)","Announced May 2024, then used across Mac lines later that year."],
+[2024,"Apple M4 Pro &amp; M4 Max","Apple","Arm (Apple Silicon)","M4 Pro: up to 14-core CPU (10 P + 4 E), 20-core GPU. M4 Max: up to 16-core CPU (12 P + 4 E), 40-core GPU","TSMC 2nd-generation 3 nm","Brought Thunderbolt 5 and higher memory bandwidth to pro Macs.","var(--bl)","Announced October 2024. The M4 Pro reaches 273 GB/s of memory bandwidth and the M4 Max 546 GB/s, up to 128 GB of memory."],
+[2025,"Apple M3 Ultra","Apple","Arm (Apple Silicon)","Up to 32-core CPU (24 P + 8 E) · up to 80-core GPU · up to 512 GB unified memory","TSMC 3 nm, two dies joined","The highest-memory Apple chip, aimed at large local AI models and heavy pro workloads.","var(--bl)","Announced March 2025 for the Mac Studio, with 819 GB/s of memory bandwidth."]];
+T.forEach((t,i)=>t.push(X[i]));
+T.push(...A);
+T.sort((a,b)=>a[0]-b[0]);
+const E=[
+["1971-1977","Early Microprocessors","4-bit and 8-bit chips like the 4004 and 8008 put a whole CPU on one chip.","var(--or)"],
+["1978-1989","The x86 Revolution","The 8086 and 80386 created the instruction set that still dominates PCs.","var(--cy)"],
+["1990s","Rise of Personal Computers","Pentium and Athlon pushed clock speeds from tens of MHz to 1 GHz.","var(--bl)"],
+["2005-2015","The Multi-Core Era","Power limits ended easy clock gains, so chips added more cores instead.","var(--te)"],
+["2007-today","ARM &amp; Mobile Computing","Efficient Arm designs powered smartphones and tablets, then laptops.","var(--rd)"],
+["2017-today","The Chiplet Era","Several small dies in one package improve yield and flexibility.","var(--te)"],
+["2020-today","The Apple Silicon Era","Apple replaced Intel chips in Macs with its own Arm-based SoCs.","var(--bl)"],
+["2023-today","AI-Accelerated Computing","NPUs and GPU accelerators became standard parts of consumer chips.","var(--cy)"],
+["2024-2026","Modern Processors","Intel 18A, Zen 5, Apple M5 and Snapdragon X2 define the current generation.","var(--or)"]];
+
+const P={ /* family,status,arch,cores,process,perf,power,accel,target,sig */
+Intel:[
+["Core Ultra Series 3 (Panther Lake)","Released","Cougar Cove P-cores, Darkmont E-cores, LPE cores","Up to 16 cores (4P + 8E + 4LPE); no Hyper-Threading","Intel 18A (compute tile)","Positioned for high-end thin-and-light laptops; Intel claims Arrow Lake-class performance","Intel claims up to 27 hours battery life in specific tests","Arc graphics up to 12 Xe3 cores; NPU up to 50 TOPS (platform up to 180 TOPS)","Laptops, mini PCs, edge devices","First client chip on Intel 18A with RibbonFET and PowerVia."],
+["Core Ultra 200S (Arrow Lake)","Released","Lion Cove P-cores + Skymont E-cores","Up to 24 cores (8P + 16E)","TSMC N3B compute tile","Desktop enthusiast and mainstream","Lower power than previous desktop generation","Integrated Xe graphics; NPU about 13 TOPS","Desktop PCs","First Intel desktop CPU built as separate tiles, dropping Hyper-Threading."]],
+AMD:[
+["Ryzen 9 9950X3D / 9950X3D2 Dual Edition / 7 9850X3D","Released","Zen 5 with 3D V-Cache","9950X3D: 16 cores; 9950X3D2: 16 cores, 192 MB L3 (2 x 96 MB); 9850X3D: 8 cores","TSMC 4 nm-class CPU chiplets","AMD markets the 9850X3D as its fastest gaming processor","Desktop-class power envelope","Basic integrated graphics; no NPU","Gaming and creator desktops","The 9950X3D2 is AMD's first dual-V-Cache consumer desktop processor."],
+["Ryzen AI 400 Series (Gorgon Point)","Released","Zen 5 + RDNA 3.5 + XDNA 2","Up to 12 cores / 24 threads, boost up to 5.2 GHz (HX 475)","TSMC 4 nm-class","Premium and mainstream AI laptops","AMD cites up to 24 h video playback","RDNA 3.5 graphics (up to 16 CUs); NPU up to 60 TOPS","AI laptops; desktop and PRO variants","Updated Zen 5 mobile chips with a stronger NPU."],
+["Ryzen AI Max+ (Strix Halo)","Released","Zen 5 + RDNA 3.5 + XDNA 2","Up to 16 cores (Max+ 395); Max+ 392 has 12, Max+ 388 has 8","TSMC 4 nm-class","High-end laptops and compact workstations","Higher power than standard mobile chips","Up to 40 CU RDNA 3.5 GPU; NPU 50 TOPS","Creators, local AI, premium gaming laptops","A very large integrated GPU that rivals discrete graphics cards."]],
+Apple:[
+["M5","Released","Arm, Apple custom cores","Up to 10-core CPU and up to 10-core GPU","TSMC 3 nm (3rd generation)","Mainstream Macs and iPad Pro","Apple emphasises performance per watt","Neural Accelerator in every GPU core; Neural Engine","MacBook Air, MacBook Pro, iPad Pro","AI acceleration inside each GPU core."],
+["M5 Pro / M5 Max","Released (announced 3 March 2026)","Arm, Fusion Architecture","18-core CPU: 6 super cores + 12 performance cores. Pro: 20-core GPU. Max: 32 or 40-core GPU","Two third-generation 3 nm dies joined","Apple claims up to 15% faster multithreading than M4 Max; Pro and Max share the CPU layout","Apple claims high efficiency; Max supports 614 GB/s memory bandwidth","16-core Neural Engine (Pro); Neural Accelerators in every GPU core; Max up to 128 GB unified memory","Pro laptops: MacBook Pro 14 and 16-inch","Fusion Architecture combines two dies as one chip with unified memory."]],
+"Apple (earlier)":[
+["M1 family (M1, Pro, Max, Ultra)","Released 2020-2022","Arm, Apple custom cores","M1: 8-core CPU (4P + 4E). Pro: 10-core. Max: 10-core with up to 32-core GPU. Ultra: 20-core with up to 64-core GPU","TSMC 5 nm","Launched the Apple Silicon era across the Mac range","Apple emphasises performance per watt","Neural Engine; GPU up to 64 cores (Ultra)","MacBook, Mac mini, iMac, Mac Studio","Replaced Intel chips in Macs and introduced UltraFusion."],
+["M2 family (M2, Pro, Max, Ultra)","Released 2022-2023","Arm, Apple custom cores","M2: 8-core CPU, up to 10-core GPU. Pro: up to 12-core. Max: up to 38-core GPU. Ultra: 24-core CPU, up to 76-core GPU","TSMC 2nd-generation 5 nm","Higher performance than M1 at every tier","Apple emphasises performance per watt","16-core Neural Engine; Ultra supports 192 GB memory","MacBook Air and Pro, Mac mini, Mac Studio, Mac Pro","First Apple chips to support the Mac Pro."],
+["M3 family (M3, Pro, Max, Ultra)","Released 2023-2025","Arm, Apple custom cores","M3: 8-core CPU, up to 10-core GPU. Pro: up to 12-core. Max: up to 16-core CPU, 40-core GPU. Ultra: 32-core CPU, 80-core GPU","TSMC 3 nm","Mid-range to workstation, with Ultra topping out at 512 GB memory","Apple emphasises performance per watt","Hardware ray tracing, mesh shading and Dynamic Caching in the GPU","MacBook, iMac, Mac Studio","Among the first 3 nm PC chips; brought GPU ray tracing to Macs."],
+["M4 family (M4, Pro, Max)","Released 2024","Arm, Apple custom cores","M4: up to 10-core CPU. Pro: up to 14-core CPU, 20-core GPU. Max: up to 16-core CPU, 40-core GPU","TSMC 2nd-generation 3 nm","Previous generation to M5 across iPad and Mac","Apple emphasises performance per watt","38 TOPS Neural Engine; Thunderbolt 5 on Pro and Max","iPad Pro, MacBook Pro, Mac mini, iMac","Pushed Apple's Neural Engine to 38 TOPS."]],
+Qualcomm:[
+["Snapdragon X2 Elite / Elite Extreme","Announced Sept 2025 · OEM devices from 2026","Arm, 3rd-gen Oryon (Prime + Performance cores)","Extreme: 18 cores (12 Prime + 6 Performance), up to 5.0 GHz on two cores","3 nm","Qualcomm claims up to 75% faster CPU than competing chips at equal power","Qualcomm claims 43% lower power than previous generation at the same performance","Adreno GPU; Hexagon NPU 80 TOPS (Extreme)","Windows laptops and mini PCs","Brings Arm chips with long battery life to Windows PCs."]],
+"Other Arm":[
+["Snapdragon 8 Elite Gen 5","Announced Sept 2025","Arm, 3rd-gen Oryon","Same Oryon generation as X2 Elite, scaled for phones","3 nm","Flagship Android phones","Designed for mobile battery constraints","Adreno GPU; Hexagon NPU","Smartphones","Shows Arm CPU designs scaling from phones to laptops."]]};
+const PX={
+"M1 family (M1, Pro, Max, Ultra)":"M1 Pro has 33.7 billion transistors, M1 Max 57 billion and M1 Ultra 114 billion. Ultra was announced March 2022.",
+"M2 family (M2, Pro, Max, Ultra)":"M2 has 20 billion transistors, M2 Pro 40 billion, M2 Max 67 billion and M2 Ultra 134 billion.",
+"M3 family (M3, Pro, Max, Ultra)":"M3 has 25 billion transistors and M3 Max 92 billion. M3 Ultra (March 2025) offers up to 512 GB of memory at 819 GB/s.",
+"M4 family (M4, Pro, Max)":"M4 has 28 billion transistors. M4 Pro reaches 273 GB/s of memory bandwidth and M4 Max 546 GB/s.",
+"Core Ultra Series 3 (Panther Lake)":"Flagship Core Ultra X9 388H: 16 cores, up to 5.1 GHz, 18 MB L3, Arc B390 graphics with 12 Xe3 cores. Supports LPDDR5X or DDR5 memory depending on model.",
+"Core Ultra 200S (Arrow Lake)":"Launched October 2024. The flagship Core Ultra 9 285K has 24 cores (8 P + 16 E).",
+"Ryzen 9 9950X3D / 9950X3D2 Dual Edition / 7 9850X3D":"The 9950X3D2's 192 MB of L3 is made of two 96 MB stacks of 3D V-Cache. The 9850X3D was announced at CES 2026.",
+"Ryzen AI 400 Series (Gorgon Point)":"Seven chips from the 12-core Ryzen AI 9 HX 475 (36 MB cache, 16 GPU CUs, 60 TOPS NPU) down to the 4-core Ryzen AI 5 430. Same architectures as Ryzen AI 300, with higher clocks and NPU speed.",
+"Ryzen AI Max+ (Strix Halo)":"Max+ 392 (12 cores) and Max+ 388 (8 cores) were added at CES 2026, boosting up to 5.0 GHz with a 50 TOPS NPU.",
+"M5":"Each GPU core includes a Neural Accelerator, and Apple states this greatly raises on-device AI throughput.",
+"M5 Pro / M5 Max":"Both chips support Thunderbolt 5. The Max supports up to 128 GB unified memory at up to 614 GB/s; the Pro reaches 307 GB/s.",
+"Snapdragon X2 Elite / Elite Extreme":"Three models: X2E-96-100 (Extreme), X2E-88-100 and X2E-80-100. Extreme has 53 MB cache and up to 228 GB/s memory bandwidth, and also supports the Snapdragon X75 5G modem.",
+"Snapdragon 8 Elite Gen 5":"Introduced at Snapdragon Summit 2025 alongside the X2 Elite, and shares its 3rd-generation Oryon CPU design."};
+const PL=["Family","Status","Architecture","Cores","Process","Positioning","Power efficiency","GPU / NPU","Market","Significance"];
+const tc={Intel:"var(--cy)",AMD:"var(--or)",Apple:"var(--bl)","Apple (earlier)":"var(--bl)",Qualcomm:"var(--te)","Other Arm":"var(--rd)"};
+
+/* name,year,transistors,MHz,cores,nm */
+const C=[["Intel 4004 (1971)",2300,0.74,1,10000],["Intel 8086 (1978)",29000,5,1,3000],["Intel 80386 (1985)",275000,16,1,1500],["Pentium (1993)",3.1e6,60,1,800],["Athlon (1999)",22e6,500,1,250],["Core 2 Conroe (2006)",291e6,2930,2,65],["Ryzen 7 1800X (2017)",4.8e9,3600,8,14],["Apple M1 (2020)",16e9,3200,8,5],["Apple M4 (2024)",28e9,4400,10,3]];
+const M={
+Transistors:{i:1,fmt:v=>v>=1e9?(v/1e9)+" billion":v>=1e6?(v/1e6)+" million":v.toLocaleString(),cap:"Transistor counts roughly doubled every two years (Moore's Law) from 2,300 to 28 billion. Figures are approximate; Ryzen 1800X reflects the commonly cited 4.8 billion of the original Zen die."},
+"Clock speed":{i:2,fmt:v=>v>=1000?(v/1000).toFixed(1)+" GHz":v+" MHz",cap:"Clock speed rose rapidly through the 2000s and then plateaued near 4-5 GHz because of heat. Values are peak/boost speeds for each representative chip."},
+Cores:{i:3,fmt:v=>v+(v>1?" cores":" core"),cap:"Single cores gave way to multi-core designs after 2005. Apple M1 and M4 core counts include performance and efficiency cores."},
+"Process node":{i:4,inv:1,fmt:v=>v>=1000?(v/1000)+" µm":v+" nm",cap:"Smaller is better. Modern 'nm' names are marketing labels rather than literal measurements. Bars are inverted so a smaller node gives a longer bar."}};
+
+const parts=[
+["Control Unit","w3","var(--cy)","The CU is the conductor of the CPU. It fetches instructions, decodes them and directs the other blocks on what to do and when."],
+["ALU","w3","var(--or)","The Arithmetic Logic Unit performs maths (add, subtract, multiply) and logic operations (AND, OR, compare). It is where actual calculations happen."],
+["Registers","w2","var(--te)","Tiny, extremely fast storage inside each core that holds the data and addresses currently being worked on."],
+["CPU Cores","w4","var(--cy)","Each core can run its own instruction stream. Modern chips combine performance cores for speed and efficiency cores for low power."],
+["Cache (L1/L2/L3)","w3","var(--bl)","Small, fast memory close to the cores that keeps frequently used data nearby, avoiding slow trips to main RAM."],
+["Memory Controller","w3","var(--te)","Manages traffic between the processor and system RAM. In Apple and Intel Lunar Lake designs memory sits right beside the chip for higher bandwidth."],
+["Integrated GPU","w3","var(--or)","A graphics engine built into the chip for displays, games and parallel workloads, without requiring a separate graphics card."],
+["NPU / AI Accelerator","w3","var(--rd)","A neural processing unit performs the matrix maths of AI models efficiently, measured in TOPS (trillions of operations per second)."]];
+
+const tech=[
+["Multi-core processing","Several cores on one chip run tasks in parallel, improving multitasking and heavily threaded work."],
+["SMT (Simultaneous Multithreading)","One core presents two threads and fills idle execution slots. AMD still uses it; Intel's latest Core Ultra Series 3 dropped Hyper-Threading."],
+["CPU cache","Layers of fast memory (L1, L2, L3) reduce the time cores spend waiting for data."],
+["ARM vs x86","x86 (Intel, AMD) is a complex instruction set with huge software compatibility; Arm uses a simpler design that licensees such as Apple and Qualcomm tailor for efficiency."],
+["64-bit architecture","Allows far more memory than the 4 GB limit of 32-bit systems. AMD introduced x86-64 in 2003."],
+["Chiplets","Splitting a processor into smaller dies improves manufacturing yield and lets designers mix processes."],
+["Integrated GPUs","Graphics on the same chip lowers cost and power, and recent designs rival entry-level graphics cards."],
+["NPUs &amp; AI acceleration","Dedicated engines run AI models locally with much less power than a CPU or GPU."],
+["Hybrid CPU architectures","Combining different core types in one chip, as in Intel Alder Lake and Apple Silicon."],
+["Performance vs efficiency cores","P-cores handle demanding tasks; E-cores handle background work using far less energy."],
+["Smaller manufacturing nodes","Moving from 10 µm to nanometre-class processes (TSMC 3 nm, Intel 18A) improves density and efficiency."],
+["3D cache","AMD's 3D V-Cache stacks extra L3 cache on the CPU die to boost latency-sensitive work such as games."],
+["3D chip stacking","Placing dies on top of one another shortens connections and raises bandwidth."],
+["SoC design","A system-on-chip integrates CPU, GPU, NPU, memory controllers and I/O on one package, as in phones and Apple Silicon."]];
+
+const fut=[
+["Specialised AI acceleration","More dedicated NPU and matrix hardware, since NPU ratings rose from tens to 80 TOPS in laptop chips in only a few years."],
+["Rising core counts","Chips keep adding cores, now mixing several core types."],
+["Performance per watt","Efficiency, not peak speed, increasingly decides what is practical in laptops and data centres."],
+["Advanced chiplets","Mixing dies from different processes in one package, with standard interconnects."],
+["3D stacking","Stacking cache, compute and memory vertically to boost bandwidth."],
+["Advanced packaging","Techniques such as Apple's Fusion Architecture join several dies as if they were one chip."],
+["AI-focused processors","Chips designed around running AI models locally and in the cloud."],
+["Heterogeneous computing","CPU, GPU, NPU and other accelerators each take the jobs they are best at."],
+["More powerful Arm systems","Arm chips from Apple and Qualcomm are pushing deeper into laptops and desktops."],
+["Emerging architectures","Research areas include open RISC-V designs, photonic interconnects and quantum processors, which complement rather than replace CPUs."]];
+
+/* ---------- BUILD ---------- */
+$("#factors").innerHTML=factors.map((f,i)=>`<div class="card fact rv"><span class="n">0${i+1}</span><h3>${f[0]}</h3><p>${f[1]}</p></div>`).join("");
+
+const tl=$("#tl");
+T.forEach((t,i)=>{
+ const li=el(`<article class="ti rv" style="--c:${t[7]}"><div class="card" style="padding:0"><button aria-expanded="false" aria-controls="p${i}"><span class="mini" aria-hidden="true"></span><span><span class="yr">${t[0]}</span><h3>${t[1]}</h3><span class="mk">${t[2]} · ${t[3]}</span></span><span class="pl" aria-hidden="true">+</span></button>
+ <div class="pn" id="p${i}"><div><dl><div><dt>Manufacturer</dt><dd>${t[2]}</dd></div><div><dt>Architecture</dt><dd>${t[3]}</dd></div><div><dt>Key specifications</dt><dd>${t[4]}</dd></div><div><dt>Manufacturing process</dt><dd>${t[5]}</dd></div><div style="grid-column:1/-1"><dt>Notable details</dt><dd>${t[8]}</dd></div></dl><p><b>Why it mattered:</b> ${t[6]}</p></div></div></div></article>`);
+ const b=$("button",li);
+ b.addEventListener("click",()=>{const o=li.classList.toggle("open");b.setAttribute("aria-expanded",o)});
+ tl.append(li);
+});
+
+$("#erag").innerHTML=E.map(e=>`<div class="card era rv" style="--c:${e[3]}" tabindex="0"><div class="bar"></div><span class="y">${e[0]}</span><h3>${e[1]}</h3><p>${e[2]}</p></div>`).join("");
+
+/* today tabs */
+const tabs=$("#tabs"),pc=$("#pcards");
+function showBrand(k){
+ $$("button",tabs).forEach(b=>b.setAttribute("aria-selected",b.dataset.k===k));
+ pc.innerHTML=P[k].map(p=>`<div class="card pc" style="--c:${tc[k]}"><h3>${p[0]}</h3><span class="st">${p[1]}</span><table>${p.slice(2).map((v,i)=>`<tr><th scope="row">${PL[i+2]}</th><td>${v}</td></tr>`).join("")}<tr><th scope="row">Key details</th><td>${PX[p[0]]}</td></tr></table></div>`).join("");
+}
+Object.keys(P).forEach((k,i)=>{const b=el(`<button role="tab" data-k="${k}">${k}</button>`);b.addEventListener("click",()=>showBrand(k));tabs.append(b)});
+showBrand("Intel");
+
+const LIB={Intel:`1971|Intel 4004|10 µm|First commercial microprocessor, 4-bit, 2,300 transistors
+1972|Intel 8008|10 µm|First 8-bit microprocessor
+1974|Intel 8080|6 µm|8-bit successor to the 8008, used in the Altair 8800
+1978|Intel 8086|3 µm|Started the x86 family, 16-bit
+1982|Intel 80286|1.5 µm|134,000 transistors; added protected mode
+1985|Intel 80386|1.5 µm|First 32-bit x86, 275,000 transistors
+1989|Intel 80486|1 µm|1.2 million transistors; built-in maths unit and 8 KB cache
+1993|Intel Pentium|0.8 µm|Superscalar, 3.1 million transistors
+1995|Intel Pentium Pro|0.6 / 0.35 µm|P6 design with out-of-order execution and on-package L2 cache
+1997|Intel Pentium II|0.35 µm|About 7.5 million transistors, sold in a slot cartridge
+1999|Intel Pentium III|0.25 µm|About 9.5 million transistors; added SSE instructions
+2000|Intel Pentium 4|0.18 µm|NetBurst design built for high clock speeds; about 42 million transistors
+2003|Intel Pentium M|130 nm|Efficiency-focused laptop chip that influenced Core
+2005|Intel Pentium D|90 nm|First dual-core Intel desktop processor
+2006|Intel Core 2 Duo / Quad|65 nm|Core microarchitecture; multi-core and efficiency focus
+2008|Intel Atom|45 nm|Low-power chips for netbooks and small devices
+2008|Intel Core 1st gen (Nehalem)|45 nm|Core i7/i5/i3 branding; integrated memory controller
+2011|Intel Core 2nd gen (Sandy Bridge)|32 nm|Graphics moved onto the CPU die; added AVX
+2012|Intel Core 3rd gen (Ivy Bridge)|22 nm|First Tri-Gate (FinFET) transistors
+2013|Intel Core 4th gen (Haswell)|22 nm|Added AVX2 instructions
+2014|Intel Core 5th gen (Broadwell)|14 nm|First 14 nm chips, launched with Core M
+2015|Intel Core 6th gen (Skylake)|14 nm|Introduced DDR4 support
+2017|Intel Core 7th gen (Kaby Lake)|14 nm|Optimised 14 nm refinement
+2017|Intel Core 8th gen (Coffee Lake)|14 nm|Six cores in mainstream desktop chips
+2018|Intel Core 9th gen (Coffee Lake Refresh)|14 nm|Core i9-9900K with 8 cores / 16 threads
+2019|Intel Core 10th gen (Ice Lake, mobile)|10 nm|Sunny Cove cores with Gen11 graphics
+2020|Intel Core 10th gen (Comet Lake)|14 nm|Up to 10 cores on desktop
+2020|Intel Core 11th gen (Tiger Lake, mobile)|10 nm SuperFin|Intel Xe integrated graphics
+2021|Intel Core 11th gen (Rocket Lake)|14 nm|Up to 8 cores; added PCIe 4.0 on desktop
+2021|Intel Core 12th gen (Alder Lake)|Intel 7|First hybrid P-core and E-core design
+2022|Intel Core 13th gen (Raptor Lake)|Intel 7|Up to 24 cores (8 P + 16 E)
+2023|Intel Core 14th gen (Raptor Lake Refresh)|Intel 7|Refresh with higher clocks, up to 24 cores
+2023|Intel Core Ultra Series 1 (Meteor Lake)|Intel 4|First Intel tile-based design with 3D Foveros packaging and an NPU
+2024|Intel Core Ultra 200V (Lunar Lake)|TSMC N3B (compute tile)|Memory on package; efficiency-first laptop chip
+2024|Intel Core Ultra 200S (Arrow Lake)|TSMC N3B (compute tile)|Desktop tile-based design, up to 24 cores
+2025|Intel Core Ultra 200H / 200HX (Arrow Lake mobile)|TSMC N3B (compute tile)|Higher-power laptop versions of Arrow Lake
+2026|Intel Core Ultra Series 3 (Panther Lake)|Intel 18A|First client chip on 18A, up to 16 cores, NPU up to 50 TOPS`,AMD:`1991|AMD Am386|—|AMD's own 386-compatible chip, up to 40 MHz
+1993|AMD Am486|—|486-compatible processors that competed on price
+1996|AMD K5|0.35 µm|AMD's first fully in-house x86 design
+1997|AMD K6|0.35 µm|About 8.8 million transistors; competitor to Pentium MMX
+1998|AMD K6-2|0.25 µm|Added 3DNow! multimedia instructions
+1999|AMD K6-III|0.25 µm|Full-speed on-die L2 cache
+1999|AMD Athlon (K7)|0.25 µm|Made AMD a true rival to Intel
+2000|AMD Athlon Thunderbird / Duron|180 nm|Thunderbird added on-die L2 cache; Duron was the budget line
+2003|AMD Opteron / Athlon 64|130 nm|Introduced 64-bit x86 (AMD64) with an integrated memory controller
+2005|AMD Athlon 64 X2|90 nm|AMD's first dual-core desktop chip
+2007|AMD Phenom|65 nm|AMD's first native quad-core design
+2011|AMD A-Series APU (Llano)|32 nm|First mainstream AMD APU combining CPU and Radeon graphics
+2011|AMD FX (Bulldozer)|32 nm|Module-based design with shared resources
+2012|AMD FX (Piledriver)|32 nm|Refined Bulldozer, such as the FX-8350
+2014|AMD A-Series APU (Kaveri)|28 nm|Added heterogeneous system architecture (HSA) support
+2017|AMD Ryzen 1000 (Zen)|14 nm|Brought 8 cores to the mainstream desktop
+2017|AMD EPYC 7001 / Threadripper 1000|14 nm|Server and workstation chips with up to 32 cores
+2018|AMD Ryzen 2000 (Zen+)|12 nm|Refinement of Zen
+2019|AMD Ryzen 3000 (Zen 2)|7 nm (chiplets)|Chiplets plus PCIe 4.0; up to 16 cores
+2019|AMD EPYC 7002 (Rome)|7 nm|Up to 64 cores per server chip
+2020|AMD Ryzen 4000 mobile (Renoir)|7 nm|8-core Zen 2 laptop chips
+2020|AMD Ryzen 5000 (Zen 3)|7 nm|Unified 8-core chiplet design
+2022|AMD Ryzen 7 5800X3D|7 nm|First consumer chip with 3D V-Cache
+2022|AMD Ryzen 6000 mobile (Rembrandt)|6 nm|Zen 3+ with RDNA 2 graphics
+2022|AMD Ryzen 7000 (Zen 4)|5 nm|AM5 socket with DDR5 and PCIe 5.0
+2022|AMD EPYC 9004 (Genoa)|5 nm|Up to 96 Zen 4 cores
+2023|AMD Ryzen 7000X3D|5 nm|3D V-Cache on Zen 4, such as the 7950X3D
+2023|AMD Ryzen 7040 (Phoenix)|4 nm|First Ryzen chips with a built-in AI engine
+2024|AMD Ryzen AI 300 (Strix Point)|TSMC 4 nm-class|Zen 5, RDNA 3.5 and an XDNA 2 NPU of 50 TOPS
+2024|AMD Ryzen 9000 (Zen 5)|TSMC 4 nm-class|Up to 16 cores on desktop
+2024|AMD Ryzen 7 9800X3D|TSMC 4 nm-class|8-core gaming chip with 3D V-Cache
+2024|AMD EPYC 9005 (Turin)|TSMC 4 nm / 3 nm|Zen 5 server chips with up to 192 cores in the dense versions
+2025|AMD Ryzen AI Max (Strix Halo)|TSMC 4 nm-class|Up to 16 cores and a 40 CU integrated GPU
+2025|AMD Ryzen 9 9950X3D|TSMC 4 nm-class|16-core Zen 5 chip with 3D V-Cache
+2026|AMD Ryzen AI 400 / Ryzen 7 9850X3D|TSMC 4 nm-class|Zen 5 refresh with a 60 TOPS NPU on mobile parts
+2026|AMD Ryzen 9 9950X3D2 Dual Edition|TSMC 4 nm-class|16 cores with 192 MB of L3 cache from two V-Cache stacks`,Apple:`2010|Apple A4|45 nm|First Apple-designed system-on-chip, used in iPhone 4 and iPad
+2011|Apple A5|45 nm|First dual-core Apple chip
+2012|Apple A6|32 nm|First Apple custom CPU core design
+2013|Apple A7|28 nm|First 64-bit Arm smartphone chip
+2014|Apple A8|20 nm|Efficiency-focused iPhone 6 chip
+2015|Apple A9|14 / 16 nm|Made at both Samsung and TSMC
+2016|Apple A10 Fusion|16 nm|Four cores (2 performance + 2 efficiency)
+2017|Apple A11 Bionic|10 nm|First Neural Engine; 4.3 billion transistors
+2018|Apple A12 Bionic|7 nm|First 7 nm smartphone chip, 6.9 billion transistors
+2019|Apple A13 Bionic|7 nm|8.5 billion transistors
+2020|Apple A14 Bionic|5 nm|11.8 billion transistors
+2020|Apple M1|5 nm|First Apple Silicon chip for Macs, 16 billion transistors
+2021|Apple A15 Bionic|5 nm|15 billion transistors
+2021|Apple M1 Pro / M1 Max|5 nm|Up to 57 billion transistors (Max)
+2022|Apple A16 Bionic|4 nm|16 billion transistors
+2022|Apple M1 Ultra|5 nm|Two M1 Max dies joined, 114 billion transistors
+2022|Apple M2|5 nm (2nd gen)|20 billion transistors
+2023|Apple A17 Pro|3 nm|19 billion transistors; first 3 nm iPhone chip
+2023|Apple M2 Pro / M2 Max|5 nm (2nd gen)|Up to 67 billion transistors (Max)
+2023|Apple M2 Ultra|5 nm (2nd gen)|134 billion transistors
+2023|Apple M3 / M3 Pro / M3 Max|3 nm|Hardware ray tracing; Max has 92 billion transistors
+2024|Apple A18 / A18 Pro|3 nm|iPhone 16 generation chips
+2024|Apple M4|3 nm (2nd gen)|28 billion transistors, 38 TOPS Neural Engine
+2024|Apple M4 Pro / M4 Max|3 nm (2nd gen)|Thunderbolt 5, up to 16-core CPU
+2025|Apple M3 Ultra|3 nm|Up to 32-core CPU and 512 GB memory
+2025|Apple A19 / A19 Pro|3 nm|iPhone 17 generation chips announced September 2025
+2025|Apple M5|3 nm (3rd gen)|Neural Accelerator in each GPU core
+2026|Apple M5 Pro / M5 Max|3 nm (3rd gen)|Fusion Architecture; 18-core CPU`,Qualcomm:`2007|Snapdragon S1 (QSD8250)|65 nm|First Snapdragon, a 1 GHz smartphone processor
+2013|Snapdragon 800|28 nm|Flagship phone chip with Krait cores
+2015|Snapdragon 820|14 nm|First Kryo custom CPU cores
+2017|Snapdragon 835|10 nm|Flagship phone chip; also used in the first Windows-on-Arm PCs
+2018|Snapdragon 845|10 nm|Flagship phone chip with Kryo 385 cores
+2018|Snapdragon 8cx|7 nm|First Snapdragon chip built for premium Windows laptops
+2019|Snapdragon 855|7 nm|Flagship phone chip; first with a dedicated 5G modem option
+2020|Snapdragon 865|7 nm|Flagship phone chip
+2020|Snapdragon 8cx Gen 2|7 nm|Second-generation Windows-on-Arm laptop chip
+2021|Snapdragon 888|5 nm|Flagship phone chip made at Samsung
+2021|Snapdragon 8 Gen 1|4 nm (Samsung)|Started the Snapdragon 8 Gen naming
+2021|Snapdragon 8cx Gen 3|5 nm|Third-generation Windows-on-Arm laptop chip
+2022|Snapdragon 8+ Gen 1|4 nm (TSMC)|Moved production to TSMC
+2022|Snapdragon 8 Gen 2|4 nm (TSMC)|Flagship phone chip
+2023|Snapdragon 8 Gen 3|4 nm (TSMC)|Flagship phone chip with on-device AI focus
+2024|Snapdragon X Elite / X Plus|4 nm|First Oryon cores in PCs, 45 TOPS NPU
+2024|Snapdragon 8 Elite|3 nm|First phone chip with Qualcomm's own Oryon cores
+2025|Snapdragon X (X1-26-100)|4 nm|8-core Oryon chip for lower-priced Copilot+ PCs, 45 TOPS NPU
+2025|Snapdragon 8 Elite Gen 5|3 nm|3rd-generation Oryon, announced September 2025
+2025|Snapdragon X2 Elite / Elite Extreme|3 nm|Up to 18 cores and 80 TOPS NPU; devices from 2026`,Other:`1975|MOS Technology 6502|NMOS|About 3,500 transistors; used in the Apple I and Apple II
+1976|Zilog Z80|NMOS|8-bit chip used in many home computers, including the ZX Spectrum
+1979|Motorola 68000|HMOS|16/32-bit design used in the original Macintosh and the Amiga
+1985|Acorn ARM1|3 µm|First Arm processor, about 25,000 transistors
+1992|DEC Alpha 21064|0.75 µm|Early 64-bit RISC design running at 200 MHz
+1993|IBM / Motorola PowerPC 601|0.6 µm|Powered the Power Macintosh from 1994
+2011|Arm big.LITTLE|—|Pairs fast and efficient cores in one chip, a forerunner of hybrid CPUs
+2020|Arm Cortex-X1|—|First of Arm's Cortex-X high-performance core line
+2021|Google Tensor|5 nm|Google's first custom phone SoC, used in the Pixel 6
+2023|NVIDIA Grace CPU Superchip|—|144 Arm Neoverse V2 cores for data centres
+2024|MediaTek Dimensity 9400|3 nm|Flagship Arm phone chip built on TSMC 3 nm`};
+Object.keys(LIB).forEach(k=>LIB[k]=LIB[k].split("\n").map(r=>r.split("|")));
+let lb="Intel";
+const ltb=$("#lt tbody"),lq=$("#lq"),ltabs=$("#ltabs");
+function libShow(){
+ const q=lq.value.trim().toLowerCase(),rows=LIB[lb].filter(r=>!q||r.join(" ").toLowerCase().includes(q));
+ ltb.innerHTML=rows.length?rows.map(r=>"<tr>"+r.map(c=>"<td>"+c+"</td>").join("")+"</tr>").join(""):'<tr><td colspan="4">No matches. Try a different search.</td></tr>';
+ $("#lc").textContent=rows.length+" of "+LIB[lb].length+" shown";
+ $$("button",ltabs).forEach(b=>b.setAttribute("aria-selected",b.dataset.k===lb));
+}
+Object.keys(LIB).forEach(k=>{const b=el(`<button role="tab" data-k="${k}">${k}</button>`);b.addEventListener("click",()=>{lb=k;libShow()});ltabs.append(b)});
+lq.addEventListener("input",libShow);libShow();
+
+/* then vs now */
+const vsd=[["Year","1971","2024",null],["Transistors","2,300","28 billion",[2300,28e9]],["Clock speed","740 kHz","up to 4.4 GHz",[0.74,4400]],["Manufacturing process","10 µm","3 nm",[3,10000],1],["Word size","4-bit","64-bit",[4,64]],["Cores","1","10 (4P + 6E)",[1,10]],["Computing capability","About 92,600 instructions/s","38 TOPS Neural Engine",null]];
+const side=(n,s,c,k)=>`<div class="card" style="--c:${c}"><h3 style="color:${c}">${n}</h3><div class="sub">${s}</div>${vsd.map(r=>{
+ const w=r[3]?(k?100:6):0;
+ return `<div class="row"><div class="lb"><span>${r[0]}</span><b>${r[k?2:1]}</b></div>${r[3]?`<div class="trk"><div class="fill" data-w="${w}"></div></div>`:""}</div>`}).join("")}</div>`;
+$("#vsb").innerHTML=side("Intel 4004","1971 · the first",'var(--or)',0)+side("Apple M4","2024 · today",'var(--cy)',1);
+$("#ratios").innerHTML=[["~12 million×","more transistors"],["~5,900×","higher clock speed"],["10×","more cores"],["16×","wider word size"]].map(r=>`<div class="card rv"><b>${r[0]}</b><small>${r[1]}</small></div>`).join("");
+
+/* comparison chart */
+const mets=$("#mets"),chart=$("#chart");
+function metric(k){
+ $$("button",mets).forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
+ const m=M[k],vals=C.map(c=>c[m.i]),lo=Math.log10(Math.min(...vals)),hi=Math.log10(Math.max(...vals));
+ chart.innerHTML=C.map(c=>{const v=c[m.i];let f=hi===lo?100:(Math.log10(v)-lo)/(hi-lo);if(m.inv)f=1-f;
+  return `<div class="row"><span class="lb">${c[0]}</span><div class="trk"><div class="fill" style="--c:var(--cy);width:0" data-w="${6+f*94}"></div></div><span class="v">${m.fmt(v)}</span></div>`}).join("");
+ $("#cap").textContent=m.cap;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>$$(".fill",chart).forEach(f=>f.style.width=f.dataset.w+"%")));
+}
+Object.keys(M).forEach(k=>{const b=el(`<button data-k="${k}">${k}</button>`);b.addEventListener("click",()=>metric(k));mets.append(b)});
+metric("Transistors");
+
+/* inside CPU */
+const dia=$("#dia"),info=$("#info");
+function showPart(i,btn){const p=parts[i];info.style.setProperty("--c",p[2]);info.innerHTML=`<h3>${p[0]}</h3><p>${p[3]}</p>`;$$("button",dia).forEach(b=>b.setAttribute("aria-pressed",b===btn))}
+dia.append(el(`<div class="lab">// die layout (conceptual)</div>`));
+const span={w2:2,w3:3,w4:4};
+parts.forEach((p,i)=>{const b=el(`<button style="--c:${p[2]};grid-column:span ${span[p[1]]}" aria-pressed="false">${p[0]}</button>`);
+ ["click","mouseenter","focus"].forEach(ev=>b.addEventListener(ev,()=>showPart(i,b)));dia.append(b)});
+info.innerHTML=`<h3>Select a component</h3><p>Hover, tap or focus on any block in the diagram to see what it does.</p><div class="hint">$ inspect --component _</div>`;
+
+$("#techg").innerHTML=tech.map(t=>`<div class="card tech rv"><h3>${t[0]}</h3><p>${t[1]}</p></div>`).join("");
+$("#futg").innerHTML=fut.map(t=>`<div class="card fut rv"><h3>${t[0]}</h3><p>${t[1]}</p></div>`).join("");
+
+/* ---------- BEHAVIOUR ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+$$(".rv").forEach(n=>io.observe(n));
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$(".fill",e.target).forEach(f=>f.style.width=f.dataset.w+"%");io2.unobserve(e.target)}}),{threshold:.3});
+io2.observe($("#vsb"));
+
+const nl=$("#nl"),mb=$("#menu");
+mb.addEventListener("click",()=>{const o=nl.classList.toggle("open");mb.setAttribute("aria-expanded",o)});
+$$("a",nl).forEach(a=>a.addEventListener("click",()=>{nl.classList.remove("open");mb.setAttribute("aria-expanded","false")}));
+const prog=$("#prog"),toTop=$("#top");
+addEventListener("scroll",()=>{const h=document.documentElement,p=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(p*100)+"%";toTop.classList.toggle("show",h.scrollTop>600)},{passive:true});
+toTop.addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
+</script>
+</body>
+</html>
